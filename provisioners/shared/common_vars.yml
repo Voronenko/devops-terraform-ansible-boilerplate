@@ -1,0 +1,23 @@
+---
+
+box_provider: "{{ lookup('env','BOX_PROVIDER') or 'default' }}"
+env: default
+
+box_whitelisted_hosts: []
+#  - "x.y.10.4/32"  # slavko
+
+box_ufw_rules_allow_from_hosts: []
+    # You can use as:
+    # - {
+    #     port: 22,
+    #     proto: tcp,
+    #     address: "192.168.0.0/16"
+    #    }
+
+box_ssh_banner: >
+    Welcome on managed server.
+    You are accessing a secured system and your actions will be logged along
+    with identifying information. Disconnect immediately if you are not an
+    authorized user of this system.
+
+

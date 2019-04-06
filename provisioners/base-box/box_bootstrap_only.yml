@@ -1,0 +1,67 @@
+---
+- hosts: currenthost
+  gather_facts: False
+
+  vars:
+    - root_dir: "{{ playbook_dir }}"
+    - shared_dir: "{{ playbook_dir }}/../shared"
+
+    - box_deploy_authorized_keys:
+        - "{{shared_dir}}/files/ssh_keys/svoronenko.pub"
+
+    - box_deploy_pass: "" # override externally
+
+  pre_tasks:
+    - debug: msg="Pre tasks section for {{ansible_host}}"
+
+    - set_fact:
+        remote_ip_address: "{{ ansible_host }}"
+
+    - include_vars: "{{shared_dir}}/common_vars.yml"
+
+    - name: Check host name present in known_hosts
+      local_action: raw {{root_dir}}/scan_server.sh {{remote_ip_address}}
+      args:
+        executable: /bin/bash
+      ignore_errors: true
+
+    - name: ANSIBLE PYTHON | install python 2
+      raw: test -e /usr/bin/python || (apt -qqy update && apt install -qy python-minimal)
+      become: yes
+
+    - name:  UNPRIVILEGED USERS | Get acl dependency (ansible unprivileged user operations magic)
+      apt: pkg="acl"
+      become: yes
+
+    - name: gather facts
+      setup:
+
+    - name: Include common pretasks
+      include_tasks: "{{shared_dir}}/common_pretasks.yml"
+      tags: always
+
+  roles:
+# Uncomment if host is not yet configured for automatic updates
+    - {
+         role: "sa-secure-automatic-updates"
+      }
+    - {
+        role: "sa-box-bootstrap",
+        deploy_user: "{{box_deploy_user}}",
+        deploy_user_authorized_keys: "{{box_deploy_authorized_keys}}",
+        deploy_user_sudo_password: "{{box_deploy_pass | password_hash('sha512')}}",
+        option_skip_deploy_sudo_password: "{{True if (box_deploy_pass == \"\") else False}}",
+        ufw_rules_allow_from_hosts: "{{box_ufw_rules_allow_from_hosts}}",
+        hostname: "{{targethost | default(ansible_hostname)}}",
+        timezone: "Europe/Kiev",
+
+        option_copy_initial_authorized_keys: true,
+        option_enforce_ssh_keys_login: "{{provider_option_enforce_ssh_keys_login | default(true)}}",
+        option_file2ban: false,
+        option_ufw: "{{provider_option_ufw | default(false)}}",
+        option_monit: false
+      }
+
+  tasks:
+
+    - debug: msg="Tasks section"

@@ -1,0 +1,5 @@
+box_deploy_user: ubuntu
+
+option_enforce_ssh_keys_login: true
+option_ufw: true
+

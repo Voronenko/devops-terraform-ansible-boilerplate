@@ -1,0 +1,12 @@
+vault-password-file
+initial-password-file
+sudo-password-file
+*/roles/sa-*
+*/roles/openstack-ansible-security
+*/**/roles/sa-*
+*.retry
+#.envrc
+.idea
+*/**/.terraform
+runtime_inventory
+local_*.sh

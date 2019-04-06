@@ -1,0 +1,6 @@
+export REMOTE_HOST=192.168.2.63
+export REMOTE_USER_INITIAL=user
+export REMOTE_PASSWORD_INITIAL=password
+export BOX_DEPLOY_USER=jenkins
+# if you use sudo
+export BOX_DEPLOY_PASS=

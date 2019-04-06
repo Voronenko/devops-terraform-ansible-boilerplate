@@ -1,0 +1,10 @@
+- src: softasap.sa-fail2ban
+  name: sa-fail2ban
+- src: softasap.sa-postfix
+  name: sa-postfix
+- src: softasap.sa-include
+  name: sa-include
+- src: softasap.sa-box-bootstrap
+  name: sa-box-bootstrap
+- src: softasap.sa-secure-automatic-updates
+  name: sa-secure-automatic-updates
