@@ -180,3 +180,35 @@ resource "null_resource" "letsencrypted_servers" {
 ```
 
 Now lets proceed in a interactive session in details
+
+
+## Support for shared parts
+
+Typical common "loader" for plays to get overrides from environment and provider level
+
+```yml
+
+- hosts: currenthost
+  gather_facts: False
+
+  vars:
+    - root_dir: "{{ playbook_dir }}"
+    - shared_dir: "{{ playbook_dir }}/../shared"
+
+  pre_tasks:
+    - debug: msg="Pre tasks section for {{ansible_host}}"
+
+    - name: gather facts
+      setup:
+
+    - name: Check for common pretasks
+      local_action: stat path="{{shared_dir}}/common_pretasks.yml"
+      register: common_pretasks_exists
+      tags: always
+
+    - name: Include common pretasks
+      include_tasks: "{{shared_dir}}/common_pretasks.yml"
+      when: common_pretasks_exists.stat.exists == true
+      tags: always
+
+```

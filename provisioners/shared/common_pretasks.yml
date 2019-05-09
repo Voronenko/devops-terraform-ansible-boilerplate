@@ -13,7 +13,7 @@
           - "{{shared_dir}}/providers/{{box_provider}}-{{env}}-vars.yml"
           - "{{shared_dir}}/providers/{{box_provider}}-vars.yml"
           - "{{shared_dir}}/providers/default-vars.yml"
-#        skip: true
+        skip: true
     tags:
       - always
 
@@ -25,6 +25,6 @@
       - files:
         - "{{shared_dir}}/envs/env-{{env}}-vars.yml"
         - "{{shared_dir}}/envs/env-default-vars.yml"
-#        skip: true
+        skip: true
     tags:
       - always
