@@ -1,5 +1,5 @@
 ---
-- hosts: currenthost
+- hosts: base_box
   gather_facts: False
 
   vars:
@@ -9,7 +9,30 @@
     - box_deploy_authorized_keys:
         - "{{shared_dir}}/files/ssh_keys/svoronenko.pub"
 
+    - box_whitelisted_hosts: []
+
     - box_deploy_pass: "" # override externally
+
+    - box_ufw_rules_allow:
+      - {
+          port: 80,
+          proto: tcp
+        }
+      - {
+          port: 443,
+          proto: tcp
+        }
+      - {
+          port: 22,
+          proto: tcp
+        }
+    - box_ufw_rules_allow_from_hosts: []
+    - box_timezone: Europe/Kiev
+
+    - box_option_security_updates: true
+    - box_option_copy_initial_authorized_keys: true
+    - box_option_file2ban: false
+    - box_option_monit: false
 
   pre_tasks:
     - debug: msg="Pre tasks section for {{ansible_host}}"
@@ -46,27 +69,27 @@
       when: common_pretasks_exists.stat.exists == true
       tags: always
 
-
   roles:
 # Uncomment if host is not yet configured for automatic updates
     - {
-         role: "sa-secure-automatic-updates"
+         role: "sa_secure_automatic_updates"
       }
     - {
-        role: "sa-box-bootstrap",
+        role: "sa_box_bootstrap",
         deploy_user: "{{box_deploy_user}}",
-        deploy_user_authorized_keys: "{{box_deploy_authorized_keys}}",
+        deploy_user_authorized_keys: "{{box_deploy_authorized_keys | default(omit)}}",
         deploy_user_sudo_password: "{{box_deploy_pass | password_hash('sha512')}}",
         option_skip_deploy_sudo_password: "{{True if (box_deploy_pass == \"\") else False}}",
-        ufw_rules_allow_from_hosts: "{{box_ufw_rules_allow_from_hosts}}",
+        ufw_rules_allow: "{{ box_ufw_rules_allow }}",
+        ufw_rules_allow_from_hosts: "{{ box_ufw_rules_allow_from_hosts }}",
         hostname: "{{targethost | default(ansible_hostname)}}",
-        timezone: "Europe/Kiev",
-
-        option_copy_initial_authorized_keys: true,
+        timezone: "{{ box_timezone }}",
+        whitelistedips: "{{ box_whitelisted_hosts }}",
+        option_copy_initial_authorized_keys: "{{ box_option_copy_initial_authorized_keys }}",
         option_enforce_ssh_keys_login: "{{provider_option_enforce_ssh_keys_login | default(true)}}",
-        option_file2ban: false,
-        option_ufw: "{{provider_option_ufw | default(false)}}",
-        option_monit: false
+        option_file2ban: "{{ box_option_file2ban }}",
+        option_firewall: "{{provider_option_ufw | default(false)}}",
+        option_monit: "{{ box_option_monit }}"
       }
 
   tasks:

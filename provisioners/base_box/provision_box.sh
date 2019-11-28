@@ -4,7 +4,7 @@ WORKSPACE=$(
   pwd
 )
 
-BOX_PLAYBOOK=$WORKSPACE/box_bootstrap_only.yml
+BOX_PLAYBOOK=$WORKSPACE/playbook.yml
 BOX_NAME=bootstrapped_box
 BOX_ADDRESS=$REMOTE_HOST
 BOX_USER=$REMOTE_USER_INITIAL

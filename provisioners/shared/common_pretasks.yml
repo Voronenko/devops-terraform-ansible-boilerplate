@@ -4,6 +4,11 @@
     tags:
       - always
 
+  - name: Fallback to default env if not yet defined
+    set_fact:
+      env: default
+    when: env is not defined
+
   - debug: msg="in {{shared_dir}}/providers/ {{box_provider}}-{{env}}-vars.yml or {{box_provider}}-vars.yml "
 
   - name: Include provider related vars

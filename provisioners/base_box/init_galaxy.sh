@@ -2,7 +2,7 @@
 
 ansible-galaxy install -p ./roles -r requirements.yml $1 $2 $3 $3 $4 $5 $6 $7 $8 $9
 
-exit 1
+exit 0
 
 git config -f .projmodules --get-regexp '^submodule\..*\.path$' > tempfile
 

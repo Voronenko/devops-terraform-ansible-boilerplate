@@ -1,0 +1,41 @@
+all: # 
+    hosts:
+        appserver-unprovisioned:
+            ansible_user_id: root
+            ansible_host: 192.168.10.14
+        appserver:
+            ansible_user_id: ubuntu
+            ansible_host: 192.168.10.14
+    vars:
+        group_all_var: value
+    children:   # key order does not matter, indentation does
+        base_box:
+            hosts:
+                # same host as above, additional group membership
+                appserver-unprovisioned:
+            vars:
+                group_last_var: value
+        traefik_box:
+            hosts:
+                # same host as above, additional group membership
+                appserver:
+            vars:
+                group_last_var: value
+
+#        other_group:
+#            children:
+#                group_x:
+#                    hosts:
+#                        test5   # Note that one machine will work without a colon
+                #group_x:
+                #    hosts:
+                #        test5  # But this won't
+                #        test7  #
+#                group_y:
+#                    hosts:
+#                        test6:  # So always use a colon
+#            vars:
+#                g2_var2: value3
+#            hosts:
+#                test4:
+#                    ansible_host: 127.0.0.1

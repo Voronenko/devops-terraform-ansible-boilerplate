@@ -1,0 +1,16 @@
+namespace: "softasap"
+name: "base_box"
+description: wraps sa_box_bootstrap to prepare hosts from base_box group for further provisioning
+version: "0.0.1"
+readme: "Readme.md"
+authors:
+    - "Vyacheslav Voronenko"
+dependencies:
+license:
+    - "MIT"
+tags:
+    - softasap
+repository: "https://github.com/oops-to-devops/base-box"
+documentation: "https://github.com/oops-to-devops/base-box/blob/master/README.md"
+homepage: "https://www.softasap.com"
+issues: "https://github.com/orgs/oops-to-devops/projects/1"
